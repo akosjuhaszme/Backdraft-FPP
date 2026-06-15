@@ -7,9 +7,15 @@
   <meta name="mobile-web-app-capable" content="yes">
   <title>Backdraft FPP - Tuzolto Verseny</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    * { touch-action: manipulation; }
-  </style>
+  <script>
+    document.addEventListener('touchmove', function(e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+    document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+    document.addEventListener('gestureend', function(e) { e.preventDefault(); });
+    document.addEventListener('dblclick', function(e) { e.preventDefault(); });
+  </script>
 </head>
 <body>
   <div id="loading">Betoltes...</div>
@@ -19,17 +25,15 @@
   <div id="menu-screen">
     <h1>BACKDRAFT FPP</h1>
     <h2>Tuzolto Verseny Jatek</h2>
-    <p style="color:#ffaa70; font-size:0.9rem; margin-bottom:1.5em; max-width:300px; text-align:center;">Valassz kategoriat, majd nyomd meg az INDITAS gombot!</p>
     <div class="menu-section">
-      <label>Kategoria:</label>
+      <label>Kategoria valasztas:</label>
       <div class="category-buttons">
-        <button class="category-btn active" data-category="strong">Eros (40 kalapalas)</button>
-        <button class="category-btn" data-category="women">Noi (20 kalapalas)</button>
-        <button class="category-btn" data-category="rookie">Ujonc (10 kalapalas)</button>
+        <button class="category-btn active" data-category="strong">Eros</button>
+        <button class="category-btn" data-category="women">Noi</button>
+        <button class="category-btn" data-category="rookie">Ujonc</button>
       </div>
     </div>
-    <button id="start-game-btn">INDITAS</button>
-    <p style="color:#888; font-size:0.7rem; margin-top:1.5em;">Bal oldalon mozgas | Jobb oldalon nezedes</p>
+    <button id="start-game-btn">JATEK INDITASA</button>
   </div>
 
   <!-- Game Canvas -->
