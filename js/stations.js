@@ -36,7 +36,7 @@ export class StationManager {
     this.stationObjects = [];
     this.stationPositions = [];
     this.stationPhase = 'approach';
-    this.interactionRadius = 5;
+    this.interactionRadius = 8;
     this.gameStarted = false;
     this.gameFinished = false;
 

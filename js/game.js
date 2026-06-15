@@ -49,7 +49,7 @@ class Game {
 
   _setupCamera() {
     this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 500);
-    this.camera.position.set(0, 1.7, 5);
+    this.camera.position.set(0, 1.7, 2);
   }
 
   _setupLights() {
@@ -107,8 +107,8 @@ class Game {
       this.ui.showCrosshair();
     }
 
-    this.camera.position.set(0, 1.7, 5);
-    this.controls.euler.set(0, Math.PI, 0, 'YXZ');
+    this.camera.position.set(0, 1.7, 2);
+    this.controls.euler.set(0, 0, 0, 'YXZ');
     this.camera.quaternion.setFromEuler(this.controls.euler);
 
     this.stations.reset(this.category);

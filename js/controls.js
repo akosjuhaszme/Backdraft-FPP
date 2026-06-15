@@ -18,7 +18,7 @@ export class ControlsManager {
 
     // Look state
     this.euler = new THREE.Euler(0, 0, 0, 'YXZ');
-    this.euler.y = Math.PI; // face away from start
+    this.euler.y = 0;
     this.locked = false;
 
     // Speed
