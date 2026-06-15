@@ -14,7 +14,9 @@ html, body {
   overflow: hidden;
   background: #000;
   font-family: 'Segoe UI', Arial, sans-serif;
-  touch-action: none;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 #game-canvas {
@@ -89,19 +91,25 @@ html, body {
 }
 
 #start-game-btn {
-  padding: 18px 60px;
+  padding: 22px 70px;
   background: #ff6b35;
-  border: none;
+  border: 3px solid #fff;
   color: #fff;
-  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+  letter-spacing: 3px;
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.6);
   transition: transform 0.1s;
   margin-top: 1em;
+  animation: pulse-start 2s ease-in-out infinite;
+}
+
+@keyframes pulse-start {
+  0%, 100% { box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4); }
+  50% { box-shadow: 0 6px 40px rgba(255, 107, 53, 0.8); }
 }
 
 #start-game-btn:active {

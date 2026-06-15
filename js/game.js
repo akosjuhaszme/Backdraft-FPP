@@ -78,21 +78,25 @@ class Game {
 
   _setupMenu() {
     const categoryBtns = document.querySelectorAll('.category-btn');
+    const selectCategory = (btn) => {
+      categoryBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      this.category = btn.dataset.category;
+    };
     categoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        categoryBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.category = btn.dataset.category;
-      });
+      btn.addEventListener('click', () => selectCategory(btn));
+      btn.addEventListener('touchend', (e) => { e.preventDefault(); selectCategory(btn); }, { passive: false });
     });
 
-    document.getElementById('start-game-btn').addEventListener('click', () => {
-      this._startGame();
-    });
+    const startBtn = document.getElementById('start-game-btn');
+    const doStart = (e) => { if (e) e.preventDefault(); this._startGame(); };
+    startBtn.addEventListener('click', doStart);
+    startBtn.addEventListener('touchend', doStart, { passive: false });
 
-    document.getElementById('retry-btn').addEventListener('click', () => {
-      this._restart();
-    });
+    const retryBtn = document.getElementById('retry-btn');
+    const doRetry = (e) => { if (e) e.preventDefault(); this._restart(); };
+    retryBtn.addEventListener('click', doRetry);
+    retryBtn.addEventListener('touchend', doRetry, { passive: false });
   }
 
   _startGame() {
@@ -161,4 +165,13 @@ class Game {
   }
 }
 
-new Game();
+try {
+  new Game();
+} catch (err) {
+  const el = document.getElementById('error-display');
+  if (el) {
+    el.style.display = 'flex';
+    el.textContent = 'Hiba tortent: ' + err.message;
+  }
+  console.error(err);
+}
