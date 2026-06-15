@@ -586,7 +586,18 @@ export class StationManager {
 
   getCollisionPosition(newPos) {
     const h = this.getHeightAt(newPos.x, newPos.z) + 1.7;
-    return new THREE.Vector3(newPos.x, h, newPos.z);
+    let x = newPos.x;
+    let z = newPos.z;
+
+    if (!this._doorOpened) {
+      const doorZ = this.stationPositions[1].z;
+      const doorX = this.stationPositions[1].x;
+      if (Math.abs(z - doorZ) < 1.5 && Math.abs(x - doorX) < 1.5) {
+        z = doorZ + 1.5;
+      }
+    }
+
+    return new THREE.Vector3(x, h, z);
   }
 
   getCurrentStationPos() {

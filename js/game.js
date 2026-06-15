@@ -17,6 +17,7 @@ class Game {
     this._setupMenu();
 
     this.stations = new StationManager(this.scene, this.ui, this.controls, this.category);
+    this.inMenu = true;
 
     this.ui.hideLoading();
     this.ui.showMenu();
@@ -100,6 +101,7 @@ class Game {
   }
 
   _startGame() {
+    this.inMenu = false;
     this.ui.hideMenu();
     this.ui.showHUD();
 
@@ -132,9 +134,10 @@ class Game {
 
     this.controls.update(delta, (newPos) => this.stations.getCollisionPosition(newPos));
 
-    this.stations.update();
-
-    this._updateDirectionArrow();
+    if (!this.inMenu) {
+      this.stations.update();
+      this._updateDirectionArrow();
+    }
 
     this.renderer.render(this.scene, this.camera);
   }
