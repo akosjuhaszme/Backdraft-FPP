@@ -171,24 +171,24 @@ html, body {
 /* ── Interaction Button ── */
 #interaction-btn {
   position: fixed;
-  bottom: 25%;
+  bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 16px 36px;
-  background: rgba(255, 107, 53, 0.9);
+  padding: 20px 44px;
+  background: rgba(255, 107, 53, 0.95);
   border: 3px solid #fff;
   color: #fff;
-  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   font-weight: 700;
   border-radius: 16px;
   cursor: pointer;
-  z-index: 60;
+  z-index: 200;
   display: none;
   pointer-events: auto;
   text-transform: uppercase;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   text-align: center;
-  min-width: 180px;
+  min-width: 200px;
 }
 
 #interaction-btn:active {

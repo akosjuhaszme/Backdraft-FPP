@@ -59,12 +59,21 @@ export class ControlsManager {
     }
   }
 
+  _isTouchOnInteractionBtn(touch) {
+    const btn = document.getElementById('interaction-btn');
+    if (!btn || btn.style.display === 'none') return false;
+    const r = btn.getBoundingClientRect();
+    return touch.clientX >= r.left && touch.clientX <= r.right &&
+           touch.clientY >= r.top && touch.clientY <= r.bottom;
+  }
+
   _setupTouch() {
     const jz = this.joystickZone;
 
     jz.addEventListener('touchstart', (e) => {
       if (!this.enabled) return;
       for (const touch of e.changedTouches) {
+        if (this._isTouchOnInteractionBtn(touch)) return;
         if (this.joystickTouchId === null) {
           this.joystickTouchId = touch.identifier;
           this.joystickActive = true;
@@ -123,6 +132,7 @@ export class ControlsManager {
     lz.addEventListener('touchstart', (e) => {
       if (!this.enabled) return;
       for (const touch of e.changedTouches) {
+        if (this._isTouchOnInteractionBtn(touch)) return;
         if (this.lookTouchId === null) {
           this.lookTouchId = touch.identifier;
           this.lookPrev = { x: touch.clientX, y: touch.clientY };

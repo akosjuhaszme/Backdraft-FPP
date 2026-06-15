@@ -136,12 +136,12 @@ export class StationManager {
 
     createPath(0, -12, 4, 25, 0);
 
-    for (let i = 0; i < 12; i++) {
-      const t = i / 12;
+    for (let i = 0; i < 16; i++) {
+      const t = i / 16;
       const y = t * 8;
-      const z = -25 - i * 2.2;
+      const z = -25 - i * 1.6;
       this._addMesh(
-        new THREE.BoxGeometry(5, 0.4, 1.8),
+        new THREE.BoxGeometry(6, 0.5, 1.6),
         this._mat(0xaa9988),
         new THREE.Vector3(0, y, z)
       );
@@ -149,12 +149,12 @@ export class StationManager {
 
     createPath(2.5, -60, 4, 20, 10);
 
-    for (let i = 0; i < 6; i++) {
-      const t = i / 6;
+    for (let i = 0; i < 8; i++) {
+      const t = i / 8;
       const y = 10 + t * 2;
-      const z = -65 - i * 1.5;
+      const z = -65 - i * 1.2;
       this._addMesh(
-        new THREE.BoxGeometry(5, 0.4, 1.3),
+        new THREE.BoxGeometry(6, 0.5, 1.2),
         this._mat(0xaa9988),
         new THREE.Vector3(3, y, z)
       );
@@ -167,12 +167,12 @@ export class StationManager {
 
     createPath(-5, -105, 4, 30, 14, 0.1);
 
-    for (let i = 0; i < 10; i++) {
-      const t = i / 10;
+    for (let i = 0; i < 14; i++) {
+      const t = i / 14;
       const y = 16 + t * 6;
-      const z = -118 - i * 1.8;
+      const z = -118 - i * 1.3;
       this._addMesh(
-        new THREE.BoxGeometry(5, 0.4, 1.5),
+        new THREE.BoxGeometry(6, 0.5, 1.3),
         this._mat(0xaa9988),
         new THREE.Vector3(-10, y, z)
       );
