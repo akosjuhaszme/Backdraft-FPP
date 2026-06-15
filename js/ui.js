@@ -143,11 +143,17 @@ export class UIManager {
       e.stopPropagation();
       callback();
     };
+    this.interactionBtn.ontouchstart = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      callback();
+    };
   }
 
   hideInteraction() {
     this.interactionBtn.style.display = 'none';
     this.interactionBtn.onclick = null;
+    this.interactionBtn.ontouchstart = null;
   }
 
   // Instruction overlay

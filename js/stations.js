@@ -774,12 +774,14 @@ export class StationManager {
       const h = document.createElement('div');
       h.className = 'handle';
       b.appendChild(h);
-      b.addEventListener('click', () => {
+      const breakerHandler = () => {
         if (!this._breakersOff[i]) {
           this._breakersOff[i] = true;
           b.classList.add('off');
         }
-      });
+      };
+      b.addEventListener('click', breakerHandler);
+      b.addEventListener('touchstart', (e) => { e.preventDefault(); breakerHandler(); }, { passive: false });
       panel.appendChild(b);
     }
 
@@ -790,12 +792,14 @@ export class StationManager {
     const vh = document.createElement('div');
     vh.className = 'valve-handle';
     v.appendChild(vh);
-    v.addEventListener('click', () => {
+    const valveHandler = () => {
       if (!this._valveClosed) {
         this._valveClosed = true;
         v.classList.add('closed');
       }
-    });
+    };
+    v.addEventListener('click', valveHandler);
+    v.addEventListener('touchstart', (e) => { e.preventDefault(); valveHandler(); }, { passive: false });
     panel.appendChild(v);
   }
 
@@ -852,7 +856,8 @@ export class StationManager {
       p.style.left = positions[i].left;
       p.style.top = positions[i].top;
       p.textContent = (i + 1).toString();
-      p.addEventListener('click', () => {
+      const knotHandler = (e) => {
+        if (e) e.preventDefault();
         if (i === this._knotStep) {
           this._knotStep++;
           p.classList.add('done');
@@ -863,7 +868,9 @@ export class StationManager {
         } else if (i > this._knotStep) {
           this.ui.addPenalty(20, 'Hibas kotelkotes sorrend');
         }
-      });
+      };
+      p.addEventListener('click', knotHandler);
+      p.addEventListener('touchstart', knotHandler, { passive: false });
       panel.appendChild(p);
     }
   }
@@ -920,7 +927,8 @@ export class StationManager {
       el.dataset.pair = end.pair;
       elMap[end.id] = el;
 
-      el.addEventListener('click', () => {
+      const couplingHandler = (e) => {
+        if (e) e.preventDefault();
         if (el.classList.contains('connected')) return;
 
         if (this._selectedHoseEnd === null) {
@@ -943,7 +951,9 @@ export class StationManager {
           }
           this._selectedHoseEnd = null;
         }
-      });
+      };
+      el.addEventListener('click', couplingHandler);
+      el.addEventListener('touchstart', couplingHandler, { passive: false });
       panel.appendChild(el);
     }
   }
