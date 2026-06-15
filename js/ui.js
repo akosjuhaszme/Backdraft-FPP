@@ -36,6 +36,16 @@ export class UIManager {
       dot.dataset.station = i;
       this.progressContainer.appendChild(dot);
     }
+
+    // Register interaction button handler ONCE (stable across frames).
+    // showInteraction only updates this._interactionCallback reference.
+    this._interactionCallback = null;
+    const fire = (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      if (this._interactionCallback) this._interactionCallback();
+    };
+    this.interactionBtn.addEventListener('click', fire);
+    this.interactionBtn.addEventListener('touchstart', fire, { passive: false });
   }
 
   hideLoading() {
@@ -139,21 +149,12 @@ export class UIManager {
     this.interactionBtn.textContent = text;
     this.interactionBtn.style.display = 'block';
     this.interactionBtn.className = isGesture ? 'gesture-hint' : '';
-    this.interactionBtn.onclick = (e) => {
-      e.stopPropagation();
-      callback();
-    };
-    this.interactionBtn.ontouchstart = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      callback();
-    };
+    this._interactionCallback = callback;
   }
 
   hideInteraction() {
     this.interactionBtn.style.display = 'none';
-    this.interactionBtn.onclick = null;
-    this.interactionBtn.ontouchstart = null;
+    this._interactionCallback = null;
   }
 
   // Instruction overlay

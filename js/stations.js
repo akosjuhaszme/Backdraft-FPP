@@ -670,11 +670,6 @@ export class StationManager {
     this.ui.updateProgress(this.currentStation);
     this.ui.showArrow();
     this.stationPhase = 'approach';
-
-    this._toolPickedUp = false;
-    this._toolPlacedBack = false;
-    this._doorOpened = false;
-    this._doorPassed = false;
   }
 
   _completeStation() {
@@ -710,7 +705,7 @@ export class StationManager {
         const wedge = this._doorGroup.getObjectByName('door-wedge');
         if (wedge) wedge.visible = false;
         const panel = this._doorGroup.getObjectByName('door-panel');
-        if (panel) panel.rotation.y = -Math.PI / 3;
+        if (panel) panel.rotation.y = -Math.PI / 1.8;
       });
     } else if (!this._toolPlacedBack) {
       this.ui.showInstruction('Tedd vissza a Halligan Tool-t es menj at az ajtón!');
