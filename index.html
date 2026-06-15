@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Backdraft FPP - Tuzolto Verseny</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="loading">Betoltes...</div>
+
+  <!-- Menu Screen -->
+  <div id="menu-screen">
+    <h1>Backdraft FPP</h1>
+    <h2>Tuzolto Verseny Idomereses</h2>
+    <div class="menu-section">
+      <label>Kategoria valasztas:</label>
+      <div class="category-buttons">
+        <button class="category-btn active" data-category="strong">Eros</button>
+        <button class="category-btn" data-category="women">Noi</button>
+        <button class="category-btn" data-category="rookie">Ujonc</button>
+      </div>
+    </div>
+    <button id="start-game-btn">JATEK INDITASA</button>
+  </div>
+
+  <!-- Game Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" style="display:none;">
+    <div id="timer-display">00:00.000</div>
+    <div id="penalty-total"></div>
+    <div id="station-info"></div>
+    <div id="progress-bar-container"></div>
+  </div>
+
+  <!-- Interaction Button -->
+  <button id="interaction-btn"></button>
+
+  <!-- Direction Arrow -->
+  <div id="direction-arrow">&#9650;</div>
+
+  <!-- Gesture Instruction -->
+  <div id="gesture-instruction"></div>
+
+  <!-- Instruction Overlay -->
+  <div id="instruction-overlay"></div>
+
+  <!-- Hammer Counter -->
+  <div id="hammer-counter"></div>
+
+  <!-- Station Task Area -->
+  <div id="station-task-area"></div>
+
+  <!-- Knot Sequence -->
+  <div id="knot-sequence"></div>
+
+  <!-- Roll Area -->
+  <div id="roll-area">
+    <div id="roll-circle">
+      <div id="roll-progress-text">0%</div>
+    </div>
+  </div>
+
+  <!-- Utility Panel -->
+  <div id="utility-panel"></div>
+
+  <!-- Coupling Panel -->
+  <div id="coupling-panel"></div>
+
+  <!-- Crosshair -->
+  <div id="crosshair"></div>
+
+  <!-- Joystick -->
+  <div id="joystick-zone">
+    <div id="joystick-base"></div>
+    <div id="joystick-thumb"></div>
+  </div>
+
+  <!-- Look Zone -->
+  <div id="look-zone"></div>
+
+  <!-- Finish Screen -->
+  <div id="finish-screen">
+    <h1>CEL!</h1>
+    <div id="finish-time">00:00.000</div>
+    <div id="finish-penalties"></div>
+    <div id="penalty-breakdown"></div>
+    <button id="retry-btn">UJRA</button>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

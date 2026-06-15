@@ -1,0 +1,618 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  touch-action: none;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Menu Screen ── */
+#menu-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a0a00 0%, #4a1500 50%, #8b2500 100%);
+  z-index: 100;
+  color: #fff;
+}
+
+#menu-screen h1 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #ff6b35;
+  text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+  margin-bottom: 0.5em;
+}
+
+#menu-screen h2 {
+  font-size: clamp(0.9rem, 3vw, 1.3rem);
+  color: #ffaa70;
+  margin-bottom: 2em;
+  font-weight: 300;
+}
+
+.menu-section {
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+.menu-section label {
+  display: block;
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 0.5em;
+}
+
+.category-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-btn {
+  padding: 12px 24px;
+  border: 2px solid #ff6b35;
+  background: transparent;
+  color: #ff6b35;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.category-btn.active, .category-btn:hover {
+  background: #ff6b35;
+  color: #fff;
+}
+
+#start-game-btn {
+  padding: 18px 60px;
+  background: #ff6b35;
+  border: none;
+  color: #fff;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+  transition: transform 0.1s;
+  margin-top: 1em;
+}
+
+#start-game-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── HUD ── */
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 50;
+  padding: 10px;
+}
+
+#timer-display {
+  text-align: center;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  font-variant-numeric: tabular-nums;
+}
+
+#penalty-total {
+  text-align: center;
+  font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+  color: #ff4444;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+#station-info {
+  text-align: center;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  color: #ffcc00;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  margin-top: 4px;
+}
+
+#progress-bar-container {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.progress-dot {
+  width: clamp(20px, 3vw, 30px);
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.3s;
+}
+
+.progress-dot.completed {
+  background: #4caf50;
+}
+
+.progress-dot.current {
+  background: #ffcc00;
+}
+
+/* ── Interaction Button ── */
+#interaction-btn {
+  position: fixed;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 36px;
+  background: rgba(255, 107, 53, 0.9);
+  border: 3px solid #fff;
+  color: #fff;
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  z-index: 60;
+  display: none;
+  pointer-events: auto;
+  text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  text-align: center;
+  min-width: 180px;
+}
+
+#interaction-btn:active {
+  transform: translateX(-50%) scale(0.93);
+}
+
+#interaction-btn.gesture-hint {
+  background: rgba(0, 150, 255, 0.9);
+}
+
+/* ── Station Task UI (tap targets, gesture areas) ── */
+#station-task-area {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: none;
+  pointer-events: auto;
+}
+
+.tap-target {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 3px solid #ffcc00;
+  border-radius: 50%;
+  background: rgba(255, 204, 0, 0.2);
+  cursor: pointer;
+  animation: pulse-target 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-target {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,204,0,0.3); }
+  50% { transform: scale(1.1); box-shadow: 0 0 25px rgba(255,204,0,0.6); }
+}
+
+/* ── Joystick ── */
+#joystick-zone {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 40%;
+  height: 40%;
+  z-index: 55;
+  pointer-events: auto;
+}
+
+#joystick-base {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.3);
+  display: none;
+}
+
+#joystick-thumb {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: 2px solid rgba(255,255,255,0.6);
+  display: none;
+}
+
+/* ── Look zone ── */
+#look-zone {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  z-index: 54;
+  pointer-events: auto;
+}
+
+/* ── Penalty Float ── */
+.penalty-float {
+  position: fixed;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #ff4444;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  z-index: 70;
+  pointer-events: none;
+  animation: float-up 2s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-100px); }
+}
+
+/* ── Station Complete Float ── */
+.station-complete-float {
+  position: fixed;
+  left: 50%;
+  top: 25%;
+  transform: translateX(-50%);
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 700;
+  color: #4caf50;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  z-index: 70;
+  pointer-events: none;
+  animation: float-up 2s ease-out forwards;
+}
+
+/* ── Finish Screen ── */
+#finish-screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 100;
+  color: #fff;
+  padding: 20px;
+}
+
+#finish-screen h1 {
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  color: #4caf50;
+  margin-bottom: 0.3em;
+}
+
+#finish-time {
+  font-size: clamp(2.5rem, 9vw, 5rem);
+  font-weight: 700;
+  color: #ffcc00;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.3em;
+}
+
+#finish-penalties {
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: #ff6b35;
+  margin-bottom: 1em;
+}
+
+#penalty-breakdown {
+  text-align: left;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  color: #ccc;
+  margin-bottom: 1.5em;
+  max-height: 30vh;
+  overflow-y: auto;
+  width: 90%;
+  max-width: 400px;
+}
+
+#penalty-breakdown div {
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#retry-btn {
+  padding: 16px 48px;
+  background: #ff6b35;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+/* ── Direction Arrow ── */
+#direction-arrow {
+  position: fixed;
+  bottom: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 45;
+  pointer-events: none;
+  font-size: 2rem;
+  color: rgba(255, 204, 0, 0.6);
+  display: none;
+}
+
+/* ── Gesture instruction ── */
+#gesture-instruction {
+  position: fixed;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  z-index: 58;
+  pointer-events: none;
+  display: none;
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  padding: 8px 20px;
+  border-radius: 10px;
+}
+
+/* ── Hammer counter ── */
+#hammer-counter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 900;
+  color: #ffcc00;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  z-index: 58;
+  pointer-events: none;
+  display: none;
+}
+
+/* ── Knot sequence ── */
+#knot-sequence {
+  position: fixed;
+  inset: 0;
+  z-index: 56;
+  display: none;
+  pointer-events: auto;
+}
+
+.knot-point {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px dashed #ffcc00;
+  background: rgba(255,204,0,0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffcc00;
+}
+
+.knot-point.done {
+  background: rgba(76, 175, 80, 0.5);
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+/* ── Hose rolling circle ── */
+#roll-area {
+  position: fixed;
+  inset: 0;
+  z-index: 56;
+  display: none;
+  pointer-events: auto;
+}
+
+#roll-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(60vw, 250px);
+  height: min(60vw, 250px);
+  border: 4px dashed rgba(255,204,0,0.6);
+  border-radius: 50%;
+}
+
+#roll-progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Desktop crosshair ── */
+#crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  z-index: 40;
+  pointer-events: none;
+  display: none;
+}
+
+/* ── Instruction overlay ── */
+#instruction-overlay {
+  position: fixed;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+  z-index: 58;
+  pointer-events: none;
+  display: none;
+  text-align: center;
+  max-width: 90%;
+  border: 1px solid rgba(255,204,0,0.3);
+}
+
+/* Breaker / valve UI */
+#utility-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 56;
+  display: none;
+  pointer-events: auto;
+  background: rgba(0,0,0,0.3);
+}
+
+.breaker, .valve {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.breaker {
+  width: 60px;
+  height: 80px;
+  background: #555;
+  border: 3px solid #888;
+}
+
+.breaker .handle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 20px;
+  background: #ff4444;
+  border-radius: 4px;
+  transition: top 0.2s;
+  top: 10px;
+}
+
+.breaker.off .handle {
+  top: 50px;
+  background: #4caf50;
+}
+
+.valve {
+  width: 80px;
+  height: 80px;
+  background: #666;
+  border: 3px solid #999;
+  border-radius: 50%;
+}
+
+.valve .valve-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 12px;
+  background: #ffcc00;
+  border-radius: 6px;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transition: transform 0.3s;
+}
+
+.valve.closed .valve-handle {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Hose coupling UI */
+#coupling-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 56;
+  display: none;
+  pointer-events: auto;
+  background: rgba(0,0,0,0.3);
+}
+
+.hose-end {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 3px solid #ff6b35;
+  background: rgba(255, 107, 53, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.hose-end.selected {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.4);
+}
+
+.hose-end.connected {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.6);
+  pointer-events: none;
+}
+
+/* Loading */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff6b35;
+  font-size: 1.5rem;
+  z-index: 200;
+}
