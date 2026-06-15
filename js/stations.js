@@ -654,6 +654,7 @@ export class StationManager {
     this.ui.hideInteraction();
     this.ui.hideInstruction();
     this.ui.startTimer();
+    this.currentStation = 1;
     this._advanceStation();
   }
 
